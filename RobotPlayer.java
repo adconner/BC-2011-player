@@ -1,6 +1,9 @@
 package hex;
 
 
+import hex.data.*;
+import hex.navigation.*;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,7 +13,7 @@ public class RobotPlayer implements Runnable {
 
 	private final RobotController myRC;
 	private RobotControls robotComps = new RobotControls();
-	private Bug navi; 
+	private Navigator navi; 
 	
 	public RobotPlayer(RobotController rc) {
         myRC = rc;
@@ -23,8 +26,12 @@ public class RobotPlayer implements Runnable {
 		if(myRC.getChassis()==Chassis.BUILDING) {
 			runBuilder();
 		}
+		else if (robotComps.builder != null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
+			navi = new Bug(new MapLocation(0,0).add(Direction.NORTH, 20), robotComps);
+			mineScout();
+		}
 		else {
-			navi = new Bug(new MapLocation(0,0).add(Direction.NORTH, 20), robotComps); //for testing
+			navi = new A_Star(new MapLocation(0,0).add(Direction.NORTH, 20), robotComps); //for testing
 			runMotor();
 		}
 	}
@@ -62,14 +69,13 @@ public class RobotPlayer implements Runnable {
 		BuilderController builder = robotComps.builder;
 		while (true) {
             try {
-				/*myRC.yield();
+				myRC.yield();
 				
-				Mine[] availableMines = robotComps.sensor.senseNearbyGameObjects(Mine.class);
+				/*Mine[] availableMines = robotComps.sensor.senseNearbyGameObjects(Mine.class);
 				for (Mine m: availableMines) {
 					motor.setDirection(Extra.dirTo(myRC.getLocation(), m.getLocation()));
 					if(!motor.canMove(myRC.getDirection()) && myRC.getTeamResources()>=Chassis.BUILDING.cost+ComponentType.RECYCLER.cost) {//If the mine is empty build a recycler
-						builder.build(Chassis.BUILDING, m.getLocation());
-						builder.build(ComponentType.RECYCLER, m.getLocation(), RobotLevel.MINE);
+						
 					}
 				}
 				/*
@@ -122,19 +128,19 @@ public class RobotPlayer implements Runnable {
                 /* Has a CONSTRUCTOR*/
                 if (robotComps.builder != null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
                 	Mine[] availableMines = robotComps.sensor.senseNearbyGameObjects(Mine.class);
+                	System.out.println(availableMines);
                 	if (availableMines.length>0) {
                 		Mine m = availableMines[0];
-    					while (motor.isActive()) {
+    						while (motor.isActive()) {
                             myRC.yield();
                         }
                 		
-                		System.out.println(robotComps.mover.withinRange(m.getLocation()));
                 		if (robotComps.mover.withinRange(m.getLocation())) {
                 			Direction dir = Extra.dirTo(myRC.getLocation(), m.getLocation());
                 			if (dir==Direction.OMNI || dir==Direction.NONE){
                     			System.out.println('4');
                     			navi = new Bug(emptylocNextTo(m.getLocation()), robotComps);
-                    			navi.bug();
+                    			navi.move();
                     			while (motor.isActive()) {
                                     myRC.yield();
                                 }
@@ -146,9 +152,12 @@ public class RobotPlayer implements Runnable {
                                     myRC.yield();
                                 }
                     			motor.moveForward();}*/
-                			if(myRC.getTeamResources()>=Chassis.BUILDING.cost+ComponentType.RECYCLER.cost) {//If the mine is empty build a recycler
+                			if(robotComps.sensor.canSenseSquare(m.getLocation()) && robotComps.sensor.senseObjectAtLocation(m.getLocation(), RobotLevel.ON_GROUND) == null && myRC.getTeamResources()>=Chassis.BUILDING.cost+ComponentType.RECYCLER.cost) {//If the mine is empty build a recycler
 	    						System.out.println('5');
                 				robotComps.builder.build(Chassis.BUILDING, m.getLocation());
+                				while (robotComps.builder.isActive())
+                					myRC.yield();
+                				robotComps.builder.build(ComponentType.RECYCLER, m.getLocation(), RobotLevel.ON_GROUND);
 	    						mineTargetSet = false;
 	    					}
                 		}
@@ -169,7 +178,7 @@ public class RobotPlayer implements Runnable {
 	    						while (motor.isActive()) {
 	                                myRC.yield();
 	                            }
-	    						navi.bug();
+	    						navi.move();
 	    					}
 	    				}
                 		while (motor.isActive()) {
@@ -179,13 +188,13 @@ public class RobotPlayer implements Runnable {
                 }
                 
                 
-                navi.bug();
+                navi.move();
                 while (motor.isActive()) {
                     myRC.yield();
                 }
                 /*if (motor.canMove(myRC.getDirection())) {
                     //System.out.println("about to move");
-                    navi.bug();
+                    navi.move();
                 }
                 else {
                 	ComponentController [] comps = myRC.newComponents();
@@ -212,4 +221,86 @@ public class RobotPlayer implements Runnable {
             }
         }
     }    
+
+    //This should probably be moved to a subclass of RobotType or something like that
+    private void mineScout() {
+    	MovementController motor = robotComps.mover;
+    	boolean mineTargetSet = false; //Tells if the bot's target has been set to a mine
+    	while (true) {
+            try {
+                /*** beginning of main loop ***/
+            	checkForNewComponents();
+                while (motor.isActive()) {
+                    myRC.yield();
+                }
+            	Mine[] availableMines = robotComps.sensor.senseNearbyGameObjects(Mine.class);
+            	System.out.println(availableMines);
+            	if (availableMines.length>0) {
+            		Mine m = availableMines[0];
+						while (motor.isActive()) {
+                        myRC.yield();
+                    }
+            		
+            		if (robotComps.mover.withinRange(m.getLocation())) {
+            			Direction dir = Extra.dirTo(myRC.getLocation(), m.getLocation());
+            			if (dir==Direction.OMNI || dir==Direction.NONE){
+                			System.out.println('4');
+                			navi = new Bug(emptylocNextTo(m.getLocation()), robotComps);
+                			navi.move();
+                			while (motor.isActive()) {
+                                myRC.yield();
+                            }
+                			motor.setDirection(Extra.dirTo(myRC.getLocation(), m.getLocation()));
+                		}
+                			//navi.setTarget(emptylocNextTo(m.getLocation()));}
+                			/*motor.setDirection(myRC.getLocation().directionTo(emptylocNextTo(m.getLocation())));
+                			while (motor.isActive()) {
+                                myRC.yield();
+                            }
+                			motor.moveForward();}*/
+            			if(robotComps.sensor.canSenseSquare(m.getLocation()) && robotComps.sensor.senseObjectAtLocation(m.getLocation(), RobotLevel.ON_GROUND) == null && myRC.getTeamResources()>=Chassis.BUILDING.cost+ComponentType.RECYCLER.cost) {//If the mine is empty build a recycler
+    						System.out.println('5');
+            				robotComps.builder.build(Chassis.BUILDING, m.getLocation());
+            				while (robotComps.builder.isActive())
+            					myRC.yield();
+            				robotComps.builder.build(ComponentType.RECYCLER, m.getLocation(), RobotLevel.ON_GROUND);
+    						mineTargetSet = false;
+    						navi = new Bug(new MapLocation(0,0).add(Direction.NORTH, 100), robotComps);
+    					}
+            		}
+            		else if (myRC.getLocation().equals(m.getLocation())) {
+            			System.out.println('2');
+            			motor.setDirection(myRC.getLocation().directionTo(emptylocNextTo(m.getLocation())));
+            			while (motor.isActive()) {
+                            myRC.yield();
+                        }
+            			//motor.moveForward();
+            		}
+    				else if (!mineTargetSet){
+    					System.out.println('3');
+    					//navi.setTarget(m.getLocation());
+    					navi = new A_Star(m.getLocation(), robotComps);
+    					mineTargetSet = true;
+    					while (!myRC.getLocation().equals(m.getLocation())) {
+    						while (motor.isActive()) {
+                                myRC.yield();
+                            }
+    						navi.move();
+    					}
+    				}
+            		while (motor.isActive()) {
+                        myRC.yield(); 
+                    }
+				}               
+                
+                navi.move();
+                while (motor.isActive()) {
+                    myRC.yield();
+                }
+            } catch (Exception e) {
+                System.out.println("caught exception:");
+                e.printStackTrace();
+            }
+    	}
+    }
 }
