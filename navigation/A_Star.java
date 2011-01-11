@@ -5,7 +5,8 @@ import hex.data.*;
 import battlecode.common.*;
 
 public class A_Star extends Navigator {
-
+	Path setPath;
+	
 	public A_Star(MapLocation tar, RobotControls cont) {
 		super(tar, cont);
 	}
@@ -24,8 +25,10 @@ public class A_Star extends Navigator {
 			//Figure out a way to record path and score of path
 			while (!open.isEmpty()) {
 				MapLocation current = open.firstKey();
-				if (current.equals(tar))
+				if (current.equals(tar)) {
+					setPath = Path.addToALOfPaths(current, closed);
 					break;
+				}
 				closed.add(current);
 				open.removeFirst();
 				ArrayList<MapLocation> adj = Extra.locsNextTo(current);
@@ -44,6 +47,11 @@ public class A_Star extends Navigator {
 			System.out.println("Problem with A_Star calculate: ");
 			e.printStackTrace();
 		}
+	}
+	
+	//Supposed to be a recursive method is called by former calculate
+	private void calculate(MapLocation prev, SortedMap<MapLocation, Double> open, ArrayList<Path> closed) {
+		
 	}
 	
 	//Calculates score based on distance to target

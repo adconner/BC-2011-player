@@ -23,8 +23,24 @@ public class Path {
 	public MapLocation getStart() {
 		return path.get(0).tile();
 	}
+	
+	//Tells if the MapLocation can be found anywhere in the path
+	public boolean contains(MapLocation loc) {
+		PathNode p = path.get(0);
+		while (!p.isEnd()) {
+			if (p.tile().equals(loc))
+				return true;
+			p = p.next();
+		}
+		//Hasn't check the last node yet
+		return p.tile().equals(loc);
+	}
 		
 	public MapLocation end() {
 		return path.get(path.size()-1).tile();
+	}
+
+	public static Path addToALOfPaths(MapLocation current, ArrayList<Path> closed) {
+		return null;
 	}
 }
