@@ -16,7 +16,26 @@ public abstract class Navigator {
 		myRC = control.mover.getRC();
 	}
 	
-	public abstract void move();
+	public void move() {
+		try {
+            /*** beginning of main loop ***/
+            while (motor.isActive()) {
+                myRC.yield();
+            }
+
+            if (motor.canMove(myRC.getDirection())) {
+                //System.out.println("about to move");
+                motor.moveForward();
+            } else {
+                motor.setDirection(myRC.getDirection().rotateRight());
+            }
+
+            /*** end of main loop ***/
+        } catch (Exception e) {
+            System.out.println("caught exception:");
+            e.printStackTrace();
+        }
+	}
 	
 	public void setTarget(MapLocation tar) {
 		target = tar;

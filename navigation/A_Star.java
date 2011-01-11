@@ -13,7 +13,8 @@ public class A_Star extends Navigator {
 
 	@Override
 	public void move() {
-		calculate(myRC.getLocation(), target);
+		super.move(); //Until function is finished
+		//calculate(myRC.getLocation(), target);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -22,6 +23,9 @@ public class A_Star extends Navigator {
 			SortedMap<MapLocation, Double> open = new SortedMap<MapLocation, Double>();
 			ArrayList<Path> closed = new ArrayList<Path>();
 			open.add(cur, scoreTile(cur, tar));
+			//
+				calculate(cur, tar, open, closed);
+			//
 			//Figure out a way to record path and score of path
 			while (!open.isEmpty()) {
 				MapLocation current = open.firstKey();
@@ -50,8 +54,28 @@ public class A_Star extends Navigator {
 	}
 	
 	//Supposed to be a recursive method is called by former calculate
-	private void calculate(MapLocation prev, SortedMap<MapLocation, Double> open, ArrayList<Path> closed) {
-		
+	private void calculate(MapLocation prev, MapLocation tar, SortedMap<MapLocation, Double> open, ArrayList<Path> closed) {
+		if (!open.isEmpty()) {
+			MapLocation current = open.firstKey();
+			if (current.equals(tar)) {
+				setPath = Path.addToALOfPaths(current, closed);
+			}
+			else {
+				Path.addToALOfPaths(current, closed);
+				open.removeFirst();
+				ArrayList<MapLocation> adj = Extra.locsNextTo(current);
+				for (MapLocation loc: adj) {
+					//Not sure how to tell if a terrain is traversable or not yet. Will fix later. 
+					//Until then, will assume all is traversable
+					if (!open.contains(loc) && !closed.contains(loc)) {
+						if (control.hasSensor() && control.sensor.canSenseSquare(loc) && control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND) == null)
+							open.addPair(loc, scoreTile(loc, tar));
+						else
+							open.addPair(loc, scoreTile(loc, tar));
+					}
+				}
+			}
+		}
 	}
 	
 	//Calculates score based on distance to target

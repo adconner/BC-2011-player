@@ -40,7 +40,8 @@ public class Path {
 		return path.get(path.size()-1).tile();
 	}
 
-	public static Path addToALOfPaths(MapLocation current, ArrayList<Path> closed) {
+	//Will edit actual paths AL
+	public static Path addToALOfPaths(MapLocation loc, ArrayList<Path> paths) {
 		return null;
 	}
 }
