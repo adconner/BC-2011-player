@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Battlecode 2011</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>bin</name>
+			<type>2</type>
+			<location>D:/Users/Austin/battlecode11/BattleCodeFiles/bin</location>
+		</link>
+		<link>
+			<name>build.xml</name>
+			<type>1</type>
+			<location>D:/Users/Austin/battlecode11/BattleCodeFiles/build.xml</location>
+		</link>
+		<link>
+			<name>examplefuncsplayer</name>
+			<type>2</type>
+			<location>D:/Users/Austin/battlecode11/BattleCodeFiles/bin/examplefuncsplayer</location>
+		</link>
+		<link>
+			<name>lib</name>
+			<type>2</type>
+			<location>D:/Users/Austin/battlecode11/BattleCodeFiles/lib</location>
+		</link>
+		<link>
+			<name>scalaplayer</name>
+			<type>2</type>
+			<location>D:/Users/Austin/battlecode11/BattleCodeFiles/bin/scalaplayer</location>
+		</link>
+		<link>
+			<name>teams</name>
+			<type>2</type>
+			<location>D:/Users/Austin/battlecode11/BattleCodeFiles/teams</location>
+		</link>
+	</linkedResources>
+</projectDescription>
