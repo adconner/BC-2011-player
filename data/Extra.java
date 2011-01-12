@@ -26,4 +26,22 @@ public class Extra {
 		return motor.canMove(dirTo(loc, tar));
 	}
 
+	//Returns a copy of an ArrayList
+	//at least for integers. not sure how to do it for generic object
+	public static ArrayList<Integer> copyIntAL(ArrayList<Integer> orig) {
+		ArrayList<Integer> clone = new ArrayList<Integer>();
+		for (int or : orig) {
+			clone.add(or);
+		}
+		return clone;
+	}
+	//Returns a copy of an ArrayList
+	//at least for Directions. not sure how to do it for generic object
+	public static ArrayList<Direction> copyDirAL(ArrayList<Direction> orig) {
+		ArrayList<Direction> clone = new ArrayList<Direction>();
+		for (Direction or : orig) {
+			clone.add(or);
+		}
+		return clone;
+	}
 }

@@ -4,48 +4,43 @@ import java.util.ArrayList;
 
 import battlecode.common.MapLocation;
 
-public class Path {
-	private ArrayList<PathNode> path;
+public class Path extends NodeStream {
 	
 	public Path(PathNode start) {
-		path = new ArrayList<PathNode>();
-		path.add(start);
+		super(start);
 	}
 	
 	public void add(PathNode next) {
-		if (path.get(path.size()-1).tile().equals(next.previous()))
-			path.add(next);
+		if (stream.get(stream.size()-1).self().equals(next.previous()))
+			stream.add(next);
 	}
 	public void add(MapLocation next) {
 		if (next.isAdjacentTo(end()))
-			path.add(path.get(path.size()-1).addToPath(next));			
+			stream.add(stream.get(stream.size()-1).add(next));			
 	}
 	
 	public MapLocation start() {
-		return path.get(0).tile();
+		return (MapLocation)super.start();
+	}
+	public MapLocation end() {
+		return (MapLocation)super.end();
 	}
 
+	@Override
 	public PathNode firstNode() {
-		return path.get(0);
+		return (PathNode)super.firstNode();
 	}
+	@Override
 	public PathNode lastNode() {
-		return path.get(path.size()-1);
+		return (PathNode)super.lastNode();
 	}
+
 	//Tells if the MapLocation can be found anywhere in the path
 	public boolean contains(MapLocation loc) {
-		PathNode p = path.get(0);
-		while (!p.isEnd()) {
-			if (p.tile().equals(loc))
-				return true;
-			p = p.next();
-		}
-		//Hasn't check the last node yet
-		return p.tile().equals(loc);
+		return super.contains(loc);
 	}
 		
-	public MapLocation end() {
-		return path.get(path.size()-1).tile();
-	}
+	
 
 	//Will edit actual paths AL
 	public static Path addToALOfPaths(MapLocation prev, MapLocation loc, ArrayList<Path> paths) {
@@ -61,10 +56,9 @@ public class Path {
 	}
 
 	public static boolean containsInALOfPaths(MapLocation loc, ArrayList<Path> paths) {
-		for (Path path : paths) {
+		for (Path path : paths)
 			if (path.contains(loc))
 				return true;
-		}
 		return false;
 	}
 }

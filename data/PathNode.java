@@ -2,71 +2,63 @@ package hex.data;
 
 import battlecode.common.*;
 
-public class PathNode {
-	private MapLocation curTile;
-	private PathNode prevPN, nextPN;
+public class PathNode extends Node {
 	
 	public PathNode(MapLocation cur) {
-		prevPN = null; curTile = cur;
+		super(cur);
+		//prevN = null; self = cur;
 	}
 	public PathNode(PathNode prev, MapLocation cur) {
-		curTile = cur; prevPN = prev;
-	}
-	
+		super(prev, cur);
+		//self = cur; prevN = prev;
+	}	
 	public PathNode(PathNode prev, MapLocation cur, PathNode next) {
-		curTile = cur; prevPN = prev; nextPN = next;
+		super(prev, cur, next);
+		//self = cur; prevN = prev; nextN = next;
 	}
-	
 	public PathNode(MapLocation prev, MapLocation loc) {
-		prevPN = new PathNode(prev);
-		curTile = loc;
+		super(prev, loc);
+		//prevN = new PathNode(prev);
+		//self = loc;
 	}
 
-	public PathNode addToPath(MapLocation next) {
-		PathNode p = new PathNode(this, next);
-		nextPN = p;
-		return p;
+	public PathNode add(MapLocation next) {
+		return (PathNode)super.add(next);
 	}
 	
-	public MapLocation tile() {
-		return curTile;
+	@Override
+	public MapLocation self() {
+		return (MapLocation)self;
 	}
+	@Override
 	public PathNode previous() {
-		return prevPN;
+		return (PathNode)prevN;
 	}
+	@Override
 	public PathNode next() {
-		return nextPN;
+		return (PathNode)nextN;
 	}
 	
 	public void setNext(MapLocation next) {
-		if (next.isAdjacentTo(curTile)) 
-			addToPath(next);			
-	}
-	
-	public boolean isRoot() {
-		return prevPN == null;
-	}
-	public boolean isEnd() {
-		return nextPN == null;
+		if (next.isAdjacentTo((MapLocation)self)) 
+			add(next);			
 	}
 
+	@Override
 	public MapLocation goToStart() {
-		PathNode p = this;
-		while (!p.isRoot())
-			p = prevPN;
-		return p.curTile;
+		return (MapLocation)super.goToStart();
 	}
+	@Override
 	public MapLocation goToEnd() {
-		PathNode p = this;
-		while (!p.isEnd())
-			p = nextPN;
-		return p.curTile;
+		return (MapLocation)super.goToEnd();
 	}
 	
+	@Override
 	public MapLocation nextTile() {
-		return nextPN.curTile;
+		return (MapLocation)nextN.self;
 	}
+	@Override
 	public MapLocation prevTile() {
-		return prevPN.curTile;
+		return (MapLocation)prevN.self;
 	}
 }
