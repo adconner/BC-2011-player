@@ -22,4 +22,8 @@ public class Extra {
 		return locs;
 	}
 
+	public static boolean canMove(MovementController motor, MapLocation loc, MapLocation tar) {
+		return motor.canMove(dirTo(loc, tar));
+	}
+
 }

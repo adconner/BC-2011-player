@@ -14,7 +14,19 @@ public class A_Star extends Navigator {
 	@Override
 	public void move() {
 		super.move(); //Until function is finished
-		//calculate(myRC.getLocation(), target);
+		/*try {			
+			calculate(myRC.getLocation(), target);
+			System.out.println(Extra.canMove(motor, myRC.getLocation(), setPath.firstNode().nextTile()));
+			if (Extra.canMove(motor, myRC.getLocation(), setPath.firstNode().nextTile())) {
+				motor.setDirection(Extra.dirTo(myRC.getLocation(), setPath.firstNode().nextTile()));
+				while (motor.isActive()) 
+					myRC.yield();
+				motor.moveForward();
+			}
+		} catch (GameActionException e) {
+			System.out.println("Error with A_Star move: ");
+			e.printStackTrace();
+		}*/
 	}
 
 	@SuppressWarnings("unchecked")
@@ -27,7 +39,7 @@ public class A_Star extends Navigator {
 				calculate(cur, tar, open, closed);
 			//
 			//Figure out a way to record path and score of path
-			while (!open.isEmpty()) {
+			/*while (!open.isEmpty()) {
 				MapLocation current = open.firstKey();
 				if (current.equals(tar)) {
 					setPath = Path.addToALOfPaths(current, closed);
@@ -46,34 +58,45 @@ public class A_Star extends Navigator {
 							open.addPair(loc, scoreTile(loc, tar));
 					}
 				}
-			}
+			}*/
 		} catch (GameActionException e) {
 			System.out.println("Problem with A_Star calculate: ");
 			e.printStackTrace();
 		}
 	}
 	
+	/*************************************************
+	 * instead of keeping track of MapLocations, just keep track of Direction
+	 * will save space and might be easier to code
+	 * will mean overhaul of current implementation though
+	 * even though this way isn't working anyway
+	 */
+	
 	//Supposed to be a recursive method is called by former calculate
-	private void calculate(MapLocation prev, MapLocation tar, SortedMap<MapLocation, Double> open, ArrayList<Path> closed) {
+	@SuppressWarnings("unchecked")
+	private void calculate(MapLocation prev, MapLocation tar, SortedMap<MapLocation, Double> open, ArrayList<Path> closed) throws GameActionException {
 		if (!open.isEmpty()) {
+			System.out.println(closed);
 			MapLocation current = open.firstKey();
 			if (current.equals(tar)) {
-				setPath = Path.addToALOfPaths(current, closed);
+				setPath = Path.addToALOfPaths(prev, current, closed);
+				open = new SortedMap<MapLocation, Double>(); //to break out of recursion
 			}
 			else {
-				Path.addToALOfPaths(current, closed);
+				Path.addToALOfPaths(prev, current, closed);
 				open.removeFirst();
 				ArrayList<MapLocation> adj = Extra.locsNextTo(current);
 				for (MapLocation loc: adj) {
 					//Not sure how to tell if a terrain is traversable or not yet. Will fix later. 
 					//Until then, will assume all is traversable
-					if (!open.contains(loc) && !closed.contains(loc)) {
+					if (!open.contains(loc) && !Path.containsInALOfPaths(loc, closed)) {
 						if (control.hasSensor() && control.sensor.canSenseSquare(loc) && control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND) == null)
 							open.addPair(loc, scoreTile(loc, tar));
-						else
+						else if (!control.hasSensor() || !control.sensor.canSenseSquare(loc))
 							open.addPair(loc, scoreTile(loc, tar));
 					}
 				}
+				calculate(current, tar, open, closed);	
 			}
 		}
 	}

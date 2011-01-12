@@ -6,6 +6,9 @@ public class PathNode {
 	private MapLocation curTile;
 	private PathNode prevPN, nextPN;
 	
+	public PathNode(MapLocation cur) {
+		prevPN = null; curTile = cur;
+	}
 	public PathNode(PathNode prev, MapLocation cur) {
 		curTile = cur; prevPN = prev;
 	}
@@ -14,6 +17,11 @@ public class PathNode {
 		curTile = cur; prevPN = prev; nextPN = next;
 	}
 	
+	public PathNode(MapLocation prev, MapLocation loc) {
+		prevPN = new PathNode(prev);
+		curTile = loc;
+	}
+
 	public PathNode addToPath(MapLocation next) {
 		PathNode p = new PathNode(this, next);
 		nextPN = p;
@@ -53,5 +61,12 @@ public class PathNode {
 		while (!p.isEnd())
 			p = nextPN;
 		return p.curTile;
+	}
+	
+	public MapLocation nextTile() {
+		return nextPN.curTile;
+	}
+	public MapLocation prevTile() {
+		return prevPN.curTile;
 	}
 }

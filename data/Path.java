@@ -8,6 +8,7 @@ public class Path {
 	private ArrayList<PathNode> path;
 	
 	public Path(PathNode start) {
+		path = new ArrayList<PathNode>();
 		path.add(start);
 	}
 	
@@ -20,10 +21,16 @@ public class Path {
 			path.add(path.get(path.size()-1).addToPath(next));			
 	}
 	
-	public MapLocation getStart() {
+	public MapLocation start() {
 		return path.get(0).tile();
 	}
-	
+
+	public PathNode firstNode() {
+		return path.get(0);
+	}
+	public PathNode lastNode() {
+		return path.get(path.size()-1);
+	}
 	//Tells if the MapLocation can be found anywhere in the path
 	public boolean contains(MapLocation loc) {
 		PathNode p = path.get(0);
@@ -41,7 +48,23 @@ public class Path {
 	}
 
 	//Will edit actual paths AL
-	public static Path addToALOfPaths(MapLocation loc, ArrayList<Path> paths) {
-		return null;
+	public static Path addToALOfPaths(MapLocation prev, MapLocation loc, ArrayList<Path> paths) {
+		for (Path path : paths) {
+			if (path.end().equals(prev)) {
+				path.add(loc);
+				return path;
+			}
+		}
+		Path p = new Path(new PathNode(prev, loc));
+		paths.add(p);
+		return p;
+	}
+
+	public static boolean containsInALOfPaths(MapLocation loc, ArrayList<Path> paths) {
+		for (Path path : paths) {
+			if (path.contains(loc))
+				return true;
+		}
+		return false;
 	}
 }
