@@ -44,4 +44,10 @@ public class Extra {
 		}
 		return clone;
 	}
+	
+	public static boolean senseIfClear(RobotControls control, MapLocation loc) throws GameActionException {
+		boolean a= control.hasSensor() && control.sensor.canSenseSquare(loc) && control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND) == null;
+		boolean b = !control.hasSensor() || !control.sensor.canSenseSquare(loc);
+		return a || b;
+	}
 }

@@ -42,7 +42,11 @@ public class SortedMap<T1, T2> extends Map {
 	
 	@SuppressWarnings("unchecked")
 	public T1 firstKey() {
-		return (T1)keys().get(0);
+		return (T1)key.get(0);
+	}
+	@SuppressWarnings("unchecked")
+	public T2 firstValue() {
+		return (T2)key.get(0);
 	}
 	
 	public void removeFirst() {

@@ -125,7 +125,7 @@ public class A_Star extends Navigator {
 			SortedMap<MapLocation, Double> open = new SortedMap<MapLocation, Double>();
 			//Keeps track of directions to get to each location
 			Map<MapLocation, ArrayList<Direction>> closed = new Map<MapLocation, ArrayList<Direction>>();
-			open.add(cur, scoreTile(cur, tar));
+			open.add(cur, 0);
 			//
 				return calculate(cur, tar, open, closed);
 			//
@@ -141,13 +141,13 @@ public class A_Star extends Navigator {
 	 * will save space and might be easier to code
 	 * will mean overhaul of current implementation though
 	 * even though this way isn't working anyway
-	 */
-	
+	 */	
 	//Supposed to be a recursive method is called by former calculate
 	@SuppressWarnings("unchecked")
 	private Direction calculate(MapLocation prev, MapLocation tar, SortedMap<MapLocation, Double> open, Map<MapLocation, ArrayList<Direction>> closed) throws GameActionException {
 		if (!open.isEmpty()) {
 			MapLocation current = open.firstKey();
+			open.removeFirst();
 			if (current.equals(tar))
 				return closed.valueOfKey(prev).get(1);
 			else {
@@ -160,30 +160,19 @@ public class A_Star extends Navigator {
 				dirs.add(Extra.dirTo(prev, current));
 				closed.add(current, dirs);
 				//////////////////////////////////////////////
-				open.removeFirst();
 				
 				//Check adjacent squares
 				ArrayList<MapLocation> adj = Extra.locsNextTo(current);
 				for (MapLocation loc: adj) {
 					//Not sure how to tell if a terrain is traversable or not yet. Will fix later. 
 					//Until then, will assume all is traversable
-					if (!open.contains(loc) && !closed.contains(loc)) {
-						if (control.hasSensor() && control.sensor.canSenseSquare(loc) && control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND) == null)
-							open.addPair(loc, scoreTile(loc, tar));
-						else if (!control.hasSensor() || !control.sensor.canSenseSquare(loc))
-							open.addPair(loc, scoreTile(loc, tar));
-					}
+					if (!open.contains(loc) && !closed.contains(loc))
+						if (Extra.senseIfClear(control, loc))
+							open.addPair(loc, dirs.size() + scoreTile(loc, tar));
 				}
 				return calculate(current, tar, open, closed);	
 			}
 		}
 		return closed.valueOfKey(prev).get(0);
-	}
-	
-	//Calculates score based on distance to target
-	//Uses Manhattan distance = (goal.x - s.x) + (goal.y - s.y)
-	//May want to use Math.sqrt(s.distanceSquaredTo(goal)) at some point, that's why return type is double
-	public double scoreTile(MapLocation cur, MapLocation tar) {
-		return Math.abs(tar.x-cur.x) + Math.abs(tar.y-cur.y);
 	}
 }

@@ -30,8 +30,18 @@ public class Map<T1, T2> {
 		return value.get(key.indexOf(k));
 	}
 	
+	public T2 getValue(int i) {
+		return (T2)value.get(i);
+	}
+	public T1 getKey(int i) {
+		return (T1)key.get(i);
+	}
 	public T1 getKeyFromValue(T2 v) {
 		return key.get(value.indexOf(v));
+	}
+	
+	public void changeValue(T1 theKey, T2 newValue) {
+		value.set(key.indexOf(theKey), newValue);
 	}
 	
 	public void remove(T1 k) {
@@ -47,5 +57,9 @@ public class Map<T1, T2> {
 	
 	public boolean isEmpty() {
 		return key.size()==0;
+	}
+
+	public int size() {
+		return key.size();
 	}
 }

@@ -84,11 +84,14 @@ public class Bug extends Navigator {
 		}
 		try {
 			do {
-				Direction dir = myRC.getDirection();
-				triedDirs.add(dir);			
-				if (motor.canMove(dir)) {
+				Direction dir = myRC.getDirection();					
+				if (motor.canMove(dir) && !triedDirs.contains(dir)) {
+					triedDirs.add(dir);	
+					if (!previousBumps.contains(myRC.getLocation()))
+						previousBumps.add(myRC.getLocation(), triedDirs);
 					return dir;
 				}
+				triedDirs.add(dir);	
 				while (motor.isActive()) {
                     myRC.yield();
                 }
