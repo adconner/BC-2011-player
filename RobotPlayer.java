@@ -36,6 +36,15 @@ public class RobotPlayer implements Runnable {
 		}
 	}
 	
+	//Tests how many ByteCodes a function or piece of code uses
+	public void testBytecodeUsage() {
+		while (true) {
+			myRC.yield();
+				//Place method toXtest here
+			System.out.println(Clock.getBytecodeNum());
+		}
+	}
+	
 	private void checkForNewComponents() {
 		ComponentController [] components = myRC.newComponents();
 		
