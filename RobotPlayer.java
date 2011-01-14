@@ -15,6 +15,7 @@ public class RobotPlayer implements Runnable {
 
 	private final RobotController myRC;
 	private RobotControls robotComps = new RobotControls();
+	private RobotSchematic me;
 	
 	public RobotPlayer(RobotController rc) {
         myRC = rc;

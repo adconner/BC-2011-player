@@ -12,13 +12,13 @@ import battlecode.common.RobotLevel;
 
 public class BuildHelper {
 	
-	// components are built in the order added to RobotScematic
+	// only the components listed as required are built
 	public static void buildInFront(BuilderController builder, RobotSchematic robot) throws GameActionException {
 		
 		RobotController myRC = builder.getRC();
 		
 		// wait for flux
-		while (builder.getRC().getTeamResources()<robot.cost()) 
+		while (builder.getRC().getTeamResources()<robot.baseCost()) 
 			myRC.yield();
 		
 		// collect build information
@@ -31,6 +31,27 @@ public class BuildHelper {
 		
 		// build components
 		for (ComponentType c: robot.components) {
+			builder.build(c, loc, level);
+			while (builder.isActive()) myRC.yield();
+		}
+	}
+	
+	public static void buildOptionalComponentsInFront(BuilderController builder, RobotSchematic robot) throws GameActionException {
+		
+		RobotController myRC = builder.getRC();
+		
+		// wait for flux
+		while (builder.getRC().getTeamResources()<robot.optionalCost()) 
+			myRC.yield();
+		
+		// collect build information
+		RobotLevel level = (robot.chassis == Chassis.FLYING?RobotLevel.IN_AIR:RobotLevel.ON_GROUND);
+		MapLocation loc = myRC.getLocation().add(myRC.getDirection());
+		
+		// NO CHASSIS BUILT, this is an optional UPGRADE
+		
+		// build components
+		for (ComponentType c: robot.optionalComps) {
 			builder.build(c, loc, level);
 			while (builder.isActive()) myRC.yield();
 		}
