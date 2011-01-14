@@ -4,6 +4,7 @@ package hex;
 import hex.data.*;
 import hex.navigation.*;
 import hex.state.*;
+import hex.state.recycler.RecyclerInitialState;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,20 +22,22 @@ public class RobotPlayer implements Runnable {
 	
 	@Override
 	public void run() {
+		//myRC.yield();
+		//myRC.yield(); // for equipping
 		checkForNewComponents();
 		
-		for (AbstractState current = getInitialState();;current.run(), current = current.getNextState())
-			checkForNewComponents(); // updates component list every state change
+		// we need to watch out here if robots are not becoming fully equipped before moving
+		
+		for (AbstractState current = getInitialState();;current.run(), current = current.getNextState()); // updates component list every state change, maybe not necessary
 
 	}
 	
 	
-	
 	private AbstractState getInitialState() {
 		if(myRC.getChassis()==Chassis.BUILDING) {
-			return new BuilderState(myRC, robotComps);
+			return new RecyclerInitialState(myRC, robotComps);
 		}
-		else if (robotComps.builder != null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
+		else if (robotComps.builder !=null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
 			return new MineScoutState(myRC, robotComps, new Navigator(myRC.getLocation().add(Direction.NORTH, 20), robotComps));
 		}
 		else {
