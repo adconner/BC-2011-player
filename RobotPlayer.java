@@ -11,10 +11,6 @@ import java.util.Random;
 import battlecode.common.*;
 
 public class RobotPlayer implements Runnable {
-	
-	
-	// role member
-	// stack member
 
 	private final RobotController myRC;
 	private RobotControls robotComps = new RobotControls();
@@ -27,21 +23,24 @@ public class RobotPlayer implements Runnable {
 	public void run() {
 		checkForNewComponents();
 		
-		AbstractState current = new NavigationState(myRC, robotComps);
-			// TODO: add code to change to appropriate initial state, perhaps dependant on chassis and components
-		
-		for (;;current.run(), current = current.getNextState())
+		for (AbstractState current = getInitialState();;current.run(), current = current.getNextState())
 			checkForNewComponents(); // updates component list every state change
 
 	}
 	
-	//Tests how many ByteCodes a function or piece of code uses
-	public void testBytecodeUsage() {
-		while (true) {
-			myRC.yield();
-				//Place method toXtest here
-			System.out.println(Clock.getBytecodeNum());
+	
+	
+	private AbstractState getInitialState() {
+		if(myRC.getChassis()==Chassis.BUILDING) {
+			return new BuilderState(myRC, robotComps);
 		}
+		else if (robotComps.builder != null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
+			return new MineScoutState(myRC, robotComps, new Navigator(myRC.getLocation().add(Direction.NORTH, 20), robotComps));
+		}
+		else {
+			return new NavigationState(myRC, robotComps, new A_Star(myRC.getLocation().add(Direction.NORTH, 20), robotComps)); //for testing
+		}
+		// TODO add code to change to appropriate initial state, perhaps dependant on chassis and components
 	}
 	
 	private void checkForNewComponents() {
@@ -70,6 +69,15 @@ public class RobotPlayer implements Runnable {
 			}
 		}
 		
+	}
+	
+	//Tests how many ByteCodes a function or piece of code uses
+	public void testBytecodeUsage() {
+		while (true) {
+			myRC.yield();
+				//Place method toXtest here
+			System.out.println(Clock.getBytecodeNum());
+		}
 	}
 
 }

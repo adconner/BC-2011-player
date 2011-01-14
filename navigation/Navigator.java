@@ -30,6 +30,8 @@ public class Navigator {
             while (motor.isActive()) {
                 myRC.yield();
             }
+			// Austin: I wonder if these checks should be the responsibity of the calling function for the sake of efficiency over safety
+            // depends on if we need the bytecode used by isActive(), same in children of Navigator
 
             if (motor.canMove(myRC.getDirection())) {
                 //System.out.println("about to move");
