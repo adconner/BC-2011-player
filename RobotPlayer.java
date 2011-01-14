@@ -34,11 +34,11 @@ public class RobotPlayer implements Runnable {
 	
 	
 	private AbstractState getInitialState() {
-		if(myRC.getChassis()==Chassis.BUILDING) {
+		if(myRC.getChassis()==Chassis.BUILDING) { //We'll eventually have to differentiate between recyclers, factories, and armories
 			return new RecyclerInitialState(myRC, robotComps);
 		}
 		else if (robotComps.builder !=null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
-			return new MineScoutState(myRC, robotComps, new Navigator(myRC.getLocation().add(Direction.NORTH, 20), robotComps));
+			return new MineScoutState(myRC, robotComps, new Navigator(myRC.getLocation().add(Direction.NORTH, 20), robotComps)); //Need a better way of picking target or just telling it to roam
 		}
 		else {
 			return new NavigationState(myRC, robotComps, new A_Star(myRC.getLocation().add(Direction.NORTH, 20), robotComps)); //for testing
@@ -60,6 +60,7 @@ public class RobotPlayer implements Runnable {
 					break;
 				case COMM:
 					robotComps.comUnit = (BroadcastController)c;
+					break;
 				case MOTOR:
 					robotComps.mover = (MovementController)c;
 					break;
@@ -78,7 +79,7 @@ public class RobotPlayer implements Runnable {
 	public void testBytecodeUsage() {
 		while (true) {
 			myRC.yield();
-				//Place method toXtest here
+				//Place method to test here
 			System.out.println(Clock.getBytecodeNum());
 		}
 	}
