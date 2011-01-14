@@ -1,25 +1,65 @@
 package hex.data;
 
+import hex.state.AbstractState;
+import hex.state.MineScoutState;
+import hex.state.NavigationState;
+import hex.state.recycler.RecyclerInitialState;
 import battlecode.common.Chassis;
 import battlecode.common.ComponentType;
 
-public class Schematics {
-	// the order of components listed is the order of component construction
+public enum Schematics {
+	// built by the CONSTRUCTOR
+	RECYCLER(Chassis.BUILDING),
+	FACTORY(Chassis.BUILDING),
+	ARMORY(Chassis.BUILDING),
+	
+	// built by the RECYCLER
+	LIGHT_ATTACK(Chassis.LIGHT),
+	LIGHT_CONSTRUCTOR(Chassis.LIGHT)
+	// ...
+	;
+	
+	// built by the CONSTRUCTOR
+	static {
+		Schematics.RECYCLER.s.addComponent(ComponentType.RECYCLER);
+		Schematics.RECYCLER.s.addOptionalComp(ComponentType.ANTENNA); // example
+		Schematics.RECYCLER.s.initialState = RecyclerInitialState.class;
+		Schematics.RECYCLER.s.totalCost(); // to cache this number, this may be a bad idea if these calculations are done for every robot
+	}
+	static {
+		Schematics.FACTORY.s.addComponent(ComponentType.FACTORY);
+		Schematics.FACTORY.s.initialState = null; // TODO change this
+		Schematics.FACTORY.s.totalCost();
+	}
+	static {
+		Schematics.ARMORY.s.addComponent(ComponentType.ARMORY);
+		Schematics.ARMORY.s.initialState = null; // TODO change this
+		Schematics.ARMORY.s.totalCost();
+	}
+	
+	// built by the RECYCLER
+	static {
+		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.HAMMER);
+		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.SIGHT);
+		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.ANTENNA);
+		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.SHIELD);
+		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.SHIELD);
+		Schematics.LIGHT_ATTACK.s.initialState = NavigationState.class; // TODO change  this
+		Schematics.LIGHT_ATTACK.s.totalCost();
+	}
+	static {
+		Schematics.LIGHT_CONSTRUCTOR.s.addComponent(ComponentType.CONSTRUCTOR);
+		Schematics.LIGHT_CONSTRUCTOR.s.addComponent(ComponentType.SIGHT);
+		Schematics.LIGHT_CONSTRUCTOR.s.initialState = MineScoutState.class; // TODO change this
+		Schematics.LIGHT_CONSTRUCTOR.s.totalCost();
+	}
+	
+	public RobotSchematic s;
 	
 	
-	// can be built at the RECYCLER
-	public static RobotSchematic lightAttack = new RobotSchematic(Chassis.LIGHT);
-	static {
-		lightAttack.addComponent(ComponentType.HAMMER);
-		lightAttack.addComponent(ComponentType.SIGHT);
-		lightAttack.addComponent(ComponentType.ANTENNA);
-		lightAttack.addComponent(ComponentType.SHIELD);
-		lightAttack.addComponent(ComponentType.SHIELD);
+	private Schematics(Chassis c) {
+		s = new RobotSchematic(c);
 	}
-	public static RobotSchematic lightConstructor = new RobotSchematic(Chassis.LIGHT);
-	static {
-		lightConstructor.addComponent(ComponentType.CONSTRUCTOR);
-		lightConstructor.addComponent(ComponentType.SIGHT);
-	}
-
+	
+	
 }
