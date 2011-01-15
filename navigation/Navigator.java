@@ -45,6 +45,20 @@ public class Navigator {
 		blindMove();
 	}
 	
+	public void useJump(MapLocation to) {
+		if (control.hasJump() && control.jumpers.get(0).withinRange(to)) 
+			for (JumpController j: control.jumpers)
+				if (!j.isActive()) {
+					try {
+						j.jump(to);
+					} catch (GameActionException e) {
+						System.out.println("Caught exception with useJump(): ");
+						e.printStackTrace();
+					}
+					return;
+				}
+	}
+	
 	public void setTarget(MapLocation tar) {
 		target = tar;
 	}
