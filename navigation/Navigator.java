@@ -11,15 +11,7 @@ public class Navigator {
 	protected RobotController myRC;
 	protected MapLocation curLoc; //to reduce number of calls to myRC.getLocation()
 	protected Direction curDir; //to reduce number of calls to myRC.getDirection()
-	
-	//********Ignore
-	private int bob = 10;
-	private void changeBob() {
-		if (bob%2 ==0) bob++;
-		else bob/=2;
-	}
-	 
-	
+		
 	public Navigator(MapLocation tar, RobotControls cont) {
 		target = tar;
 		control = cont;
@@ -33,26 +25,14 @@ public class Navigator {
             while (motor.isActive()) {
                 myRC.yield();
             }
-            curDir = myRC.getDirection();
-			// Austin: I wonder if these checks should be the responsibity of the calling function for the sake of efficiency over safety
+            // Austin: I wonder if these checks should be the responsibity of the calling function for the sake of efficiency over safety
             // depends on if we need the bytecode used by isActive(), same in children of Navigator
 
+            curDir = myRC.getDirection();
             if (motor.canMove(curDir)) {
                 motor.moveForward();
-            } else {
-            	/*if(bob%2==0) 
-            		while(!motor.canMove(myRC.getDirection())) {
-            			motor.setDirection(myRC.getDirection().rotateRight());
-            			while (motor.isActive()) myRC.yield();
-            		}
-            	else
-            		while(!motor.canMove(myRC.getDirection())) {
-            			motor.setDirection(myRC.getDirection().rotateLeft());
-            			while (motor.isActive()) myRC.yield();
-            		}
-            	changeBob();*/
+            } else 
             	motor.setDirection(Extra.findClearDir(curDir, motor));
-            }
 
             /*** end of main loop ***/
         } catch (Exception e) {

@@ -5,7 +5,6 @@ import hex.data.RobotControls;
 import hex.navigation.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import battlecode.common.*;
 
