@@ -7,7 +7,6 @@ import hex.state.*;
 import hex.state.recycler.RecyclerInitialState;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import battlecode.common.*;
 
@@ -23,7 +22,6 @@ public class RobotPlayer implements Runnable {
 	
 	@Override
 	public void run() {
-		//myRC.yield();
 		//myRC.yield(); // for equipping
 		checkForNewComponents();
 		
@@ -54,7 +52,10 @@ public class RobotPlayer implements Runnable {
 			switch (c.componentClass()) {
 				case ARMOR:
 				case MISC:
-					robotComps.extra.add(c);
+					if (c instanceof JumpController)
+						robotComps.addJump((JumpController)c);
+					else
+						robotComps.extra.add(c);
 					break;
 				case BUILDER:
 					robotComps.builder = (BuilderController)c;
@@ -72,8 +73,7 @@ public class RobotPlayer implements Runnable {
 					robotComps.weapons.add((WeaponController)c);
 					break;
 			}
-		}
-		
+		}	
 	}
 	
 	//Tests how many ByteCodes a function or piece of code uses

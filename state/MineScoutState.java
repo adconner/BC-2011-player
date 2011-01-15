@@ -2,22 +2,12 @@ package hex.state;
 
 import hex.data.Extra;
 import hex.data.RobotControls;
-import hex.navigation.Bug;
-import hex.navigation.Navigator;
+import hex.navigation.*;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import battlecode.common.Chassis;
-import battlecode.common.ComponentType;
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.GameObject;
-import battlecode.common.MapLocation;
-import battlecode.common.Mine;
-import battlecode.common.MovementController;
-import battlecode.common.RobotController;
-import battlecode.common.RobotLevel;
+import battlecode.common.*;
 
 public class MineScoutState extends AbstractState {
 
@@ -137,7 +127,4 @@ public class MineScoutState extends AbstractState {
 		Random r = new Random();
 		return locs.get(r.nextInt(locs.size()));
 	}
-	
-	
-
 }

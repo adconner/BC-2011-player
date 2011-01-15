@@ -1,9 +1,6 @@
 package hex.data;
 
-import hex.state.AbstractState;
-import hex.state.MineScoutState;
-import hex.state.NavigationState;
-import hex.state.recycler.RecyclerInitialState;
+import hex.state.*;
 import battlecode.common.Chassis;
 import battlecode.common.ComponentType;
 

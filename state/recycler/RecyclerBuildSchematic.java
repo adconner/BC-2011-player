@@ -1,14 +1,10 @@
 package hex.state.recycler;
 
 import hex.data.BuildHelper;
+import hex.data.Extra;
 import hex.data.RobotControls;
 import hex.data.RobotSchematic;
-import battlecode.common.BuilderController;
-import battlecode.common.Chassis;
-import battlecode.common.ComponentType;
-import battlecode.common.MovementController;
-import battlecode.common.RobotController;
-import battlecode.common.RobotLevel;
+import battlecode.common.*;
 
 public class RecyclerBuildSchematic extends RecyclerAbstractState {
 
@@ -24,9 +20,14 @@ public class RecyclerBuildSchematic extends RecyclerAbstractState {
 		BuilderController builder = robotComps.builder;
         try {
 			
-			if(!motor.canMove(myRC.getDirection())) //Determines if the tile in front is empty, otherwise, rotates
-				motor.setDirection(myRC.getDirection().rotateRight());
+        	Direction d = myRC.getDirection(); //Reduces calls to getDirection()
+			if(!motor.canMove(d)) //Determines if the tile in front is empty, otherwise, rotates
+//				motor.setDirection(d.rotateRight());
+				motor.setDirection(Extra.findClearDir(d, motor, -1));
 			
+			while (myRC.getTeamResources() < schematic.totalCost()) {
+				//Do nothing, then build
+			}
 			BuildHelper.buildInFront(builder, schematic);
 			
         } 

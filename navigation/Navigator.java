@@ -8,6 +8,8 @@ public class Navigator {
 	protected RobotControls control; //Is this necessary? Since we have motor and myRC
 	protected MovementController motor;
 	protected RobotController myRC;
+	protected MapLocation curLoc; //to reduce number of calls to myRC.getLocation()
+	protected Direction curDir; //to reduce number of calls to myRC.getDirection()
 	
 	//********Ignore
 	private int bob = 10;

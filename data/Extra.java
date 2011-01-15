@@ -1,7 +1,6 @@
 package hex.data;
 
 import java.util.ArrayList;
-
 import battlecode.common.*;
 
 public class Extra {
@@ -35,8 +34,11 @@ public class Extra {
 		}
 		return clone;
 	}
-	//Returns a copy of an ArrayList
-	//at least for Directions. not sure how to do it for generic object
+	
+	/**Returns a copy of an ArrayList of Directions. Not sure how to do it for generic object
+	 * @param orig -- the AL to be copied
+	 * @return
+	 */
 	public static ArrayList<Direction> copyDirAL(ArrayList<Direction> orig) {
 		ArrayList<Direction> clone = new ArrayList<Direction>();
 		for (Direction or : orig) {
@@ -49,5 +51,71 @@ public class Extra {
 		boolean a= control.hasSensor() && control.sensor.canSenseSquare(loc) && control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND) == null;
 		boolean b = !control.hasSensor() || !control.sensor.canSenseSquare(loc);
 		return a || b;
+	}
+
+	/**
+	 * rotates direction degrees number of degrees, in direction of unit circle (counter-clockwise)
+	 * best to use only if degrees > 45
+	 * @param from
+	 * @param degrees
+	 * @return
+	 */
+	public static Direction rotate(Direction from, int degrees) {
+		degrees%=360; degrees/=45; //Figures out how many times to turn
+		if (degrees > 0) {
+			while (degrees != 0) {
+				from = from.rotateLeft();
+				degrees--;
+			}				
+		}
+		else {
+			while (degrees != 0) {
+				from = from.rotateRight();
+				degrees++;
+			}
+		}
+		return from;
+	}
+
+	/**
+	 * returns positive degree value between first and second
+	 * @param first
+	 * @param second
+	 * @return
+	 */
+	public static int degreesBetween(Direction first, Direction second) {
+		int turns = 0;
+		while (first != second) {
+			first.rotateLeft();
+			turns++;
+		}
+		return turns*45;
+	}
+	
+	/** Consumes a max of 240 bytecodes
+	 * @param current
+	 * @param mot
+	 * @return
+	 */
+	public static Direction findClearDir(Direction current, MovementController mot) {
+		while (!mot.canMove(current))
+			current = current.rotateLeft();
+		return current;
+	}
+	
+	/** Consumes a max of 240 bytecodes
+	 * @param current
+	 * @param mot
+	 * @param direct --either 1 for rotateLeft() or -1 for rotateRight()
+	 * @return
+	 */
+	public static Direction findClearDir(Direction current, MovementController mot, int direct) {
+		while (!mot.canMove(current))
+			if (direct > 0)
+				current = rotate(current, 45);
+			else if (direct < 0)
+				current = rotate(current, -45);
+			else break; 
+		return findClearDir(current, mot);
 	}
 }
