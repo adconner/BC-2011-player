@@ -23,17 +23,14 @@ public enum Schematics {
 	static {
 		Schematics.RECYCLER.s.addComponent(ComponentType.RECYCLER);
 		Schematics.RECYCLER.s.addOptionalComp(ComponentType.ANTENNA); // example
-		Schematics.RECYCLER.s.initialState = RecyclerInitialState.class;
 		Schematics.RECYCLER.s.totalCost(); // to cache this number, this may be a bad idea if these calculations are done for every robot
 	}
 	static {
 		Schematics.FACTORY.s.addComponent(ComponentType.FACTORY);
-		Schematics.FACTORY.s.initialState = null; // TODO change this
 		Schematics.FACTORY.s.totalCost();
 	}
 	static {
 		Schematics.ARMORY.s.addComponent(ComponentType.ARMORY);
-		Schematics.ARMORY.s.initialState = null; // TODO change this
 		Schematics.ARMORY.s.totalCost();
 	}
 	
@@ -44,13 +41,11 @@ public enum Schematics {
 		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.ANTENNA);
 		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.SHIELD);
 		Schematics.LIGHT_ATTACK.s.addComponent(ComponentType.SHIELD);
-		Schematics.LIGHT_ATTACK.s.initialState = NavigationState.class; // TODO change  this
 		Schematics.LIGHT_ATTACK.s.totalCost();
 	}
 	static {
 		Schematics.LIGHT_CONSTRUCTOR.s.addComponent(ComponentType.CONSTRUCTOR);
 		Schematics.LIGHT_CONSTRUCTOR.s.addComponent(ComponentType.SIGHT);
-		Schematics.LIGHT_CONSTRUCTOR.s.initialState = MineScoutState.class; // TODO change this
 		Schematics.LIGHT_CONSTRUCTOR.s.totalCost();
 	}
 	

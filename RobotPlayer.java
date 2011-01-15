@@ -36,7 +36,7 @@ public class RobotPlayer implements Runnable {
 	
 	private AbstractState getInitialState() {
 		if(myRC.getChassis()==Chassis.BUILDING) { //We'll eventually have to differentiate between recyclers, factories, and armories
-			return Schematics.RECYCLER.s.getNewInitialState();
+			return new RecyclerInitialState(myRC, robotComps);
 		}
 		else if (robotComps.builder !=null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
 			return new MineScoutState(myRC, robotComps, new Navigator(myRC.getLocation().add(Direction.NORTH, 20), robotComps)); //Need a better way of picking target or just telling it to roam

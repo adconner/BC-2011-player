@@ -3,11 +3,6 @@ package hex.data;
 import battlecode.common.Chassis;
 import battlecode.common.ComponentType;
 
-import hex.state.AbstractState;
-import hex.state.MineScoutState;
-import hex.state.NavigationState;
-import hex.state.recycler.RecyclerInitialState;
-
 import java.util.ArrayList;
 
 // the order of the components indicates in which order they should be built
@@ -18,8 +13,6 @@ public class RobotSchematic {
 	
 	// generally, components built at another building
 	public ArrayList<ComponentType> optionalComps = new ArrayList<ComponentType>();
-	
-	public Class initialState;
 	
 	private double baseCost;
 	private boolean baseCostUpToDate = false;
@@ -45,17 +38,6 @@ public class RobotSchematic {
 	public void addOptionalComp(ComponentType comp) {
 		optionalComps.add(comp);
 		optionalCostUpToDate = false;
-	}
-	
-	public AbstractState getNewInitialState() {
-		try {
-			return (AbstractState) initialState.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public double baseCost() {
