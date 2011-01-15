@@ -26,7 +26,7 @@ public class Bug extends Navigator {
 		try {
 			curLoc = myRC.getLocation();
 			curDir = myRC.getDirection();
-			if (!curLoc.equals(target))
+			if (!curLoc.equals(target)) {
 				if (tracing) {
 					if (canDeadReckon()) {
 						tracing = false; //Stop tracing
@@ -70,6 +70,7 @@ public class Bug extends Navigator {
 						motor.moveForward();
 					}
 				}
+			}
 		}
 		catch (GameActionException e) {
 			System.out.println("caught exception (with Bug):");
@@ -80,17 +81,11 @@ public class Bug extends Navigator {
 	//Only used if tracing
 	private void hitWall() throws GameActionException {
 		if (sideOfWall == 'L') {
-			Direction d = curDir;
-			while (!motor.canMove(d))
-				d = d.rotateRight();
-			motor.setDirection(d);
+			motor.setDirection(Extra.findClearDir(curDir, motor, -1));
 			return;
 		}
 		if (sideOfWall == 'R') {
-			Direction d = curDir;
-			while (!motor.canMove(d))
-				d = d.rotateLeft();
-			motor.setDirection(d);
+			motor.setDirection(Extra.findClearDir(curDir, motor, 1));
 		}
 	}
 
@@ -134,6 +129,7 @@ public class Bug extends Navigator {
 				int degRot = Extra.degreesBetween(curDir, dir);
 				if (degRot < 180) sideOfWall = 'R';
 				else if (degRot > 180) sideOfWall = 'L';
+				System.out.print(sideOfWall);
 				return dir;
 			}
 			else if (!tried) {

@@ -19,16 +19,17 @@ public class RecyclerBuildSchematic extends RecyclerAbstractState {
 		MovementController motor = robotComps.mover;
 		BuilderController builder = robotComps.builder;
         try {
-			
-        	Direction d = myRC.getDirection(); //Reduces calls to getDirection()
-			if(!motor.canMove(d)) //Determines if the tile in front is empty, otherwise, rotates
-//				motor.setDirection(d.rotateRight());
-				motor.setDirection(Extra.findClearDir(d, motor, -1));
-			
-			while (myRC.getTeamResources() < schematic.totalCost()) {
-				//Do nothing, then build
-			}
-			BuildHelper.buildInFront(builder, schematic);
+			while (builder.isActive())
+				myRC.yield();
+        	
+			boolean can = motor.canMove(myRC.getDirection());
+        	if (myRC.getTeamResources() >= schematic.totalCost() && !builder.isActive() && (!can || !motor.isActive())) {
+        	
+				if(!can) //Determines if the tile in front is empty, otherwise, rotates
+					motor.setDirection(Extra.findClearDir(myRC.getDirection().rotateRight(), motor, -1));
+				
+				BuildHelper.buildInFront(builder, schematic);
+        	}
 			
         } 
         catch (Exception e) {

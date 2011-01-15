@@ -1,5 +1,6 @@
 package hex.navigation;
 
+import hex.data.Extra;
 import hex.data.RobotControls;
 import battlecode.common.*;
 
@@ -32,14 +33,14 @@ public class Navigator {
             while (motor.isActive()) {
                 myRC.yield();
             }
+            curDir = myRC.getDirection();
 			// Austin: I wonder if these checks should be the responsibity of the calling function for the sake of efficiency over safety
             // depends on if we need the bytecode used by isActive(), same in children of Navigator
 
-            if (motor.canMove(myRC.getDirection())) {
-                //System.out.println("about to move");
+            if (motor.canMove(curDir)) {
                 motor.moveForward();
             } else {
-            	if(bob%2==0) 
+            	/*if(bob%2==0) 
             		while(!motor.canMove(myRC.getDirection())) {
             			motor.setDirection(myRC.getDirection().rotateRight());
             			while (motor.isActive()) myRC.yield();
@@ -49,7 +50,8 @@ public class Navigator {
             			motor.setDirection(myRC.getDirection().rotateLeft());
             			while (motor.isActive()) myRC.yield();
             		}
-            	changeBob();
+            	changeBob();*/
+            	motor.setDirection(Extra.findClearDir(curDir, motor));
             }
 
             /*** end of main loop ***/

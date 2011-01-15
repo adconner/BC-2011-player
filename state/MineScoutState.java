@@ -30,16 +30,17 @@ public class MineScoutState extends AbstractState {
                     myRC.yield();
                 }
             	for (Mine min : robotComps.sensor.senseNearbyGameObjects(Mine.class))
-            		if (!availableMines.contains(min))
+            		if (!availableMines.contains(min) && Extra.senseIfClear(robotComps, min.getLocation()))
             			availableMines.add(min);
-            	System.out.println(availableMines);
+            	//System.out.println(availableMines);
+            	myRC.setIndicatorString(1, availableMines.toString());
             	if (availableMines.size()>0) {
             		Mine m = availableMines.get(0);
-						while (motor.isActive()) {
-                        myRC.yield();
-                    }
+					while (motor.isActive()) 
+						myRC.yield();
             		
-            		if (robotComps.mover.withinRange(m.getLocation())) {
+//            		if (robotComps.mover.withinRange(m.getLocation())) {
+					if (robotComps.sensor.withinRange(m.getLocation())) {
             			Direction dir = Extra.dirTo(myRC.getLocation(), m.getLocation());
             			if (dir==Direction.OMNI || dir==Direction.NONE){
                 			System.out.println('4');
