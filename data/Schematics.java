@@ -1,5 +1,9 @@
 package hex.data;
 
+<<<<<<< HEAD
+=======
+import hex.state.*;
+>>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
 import battlecode.common.Chassis;
 import battlecode.common.ComponentType;
 

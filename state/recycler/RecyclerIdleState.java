@@ -15,4 +15,8 @@ public class RecyclerIdleState extends RecyclerAbstractState {
 		myRC.yield();
 	}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
 }

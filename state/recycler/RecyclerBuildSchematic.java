@@ -29,7 +29,12 @@ public class RecyclerBuildSchematic extends RecyclerAbstractState {
 					motor.setDirection(Extra.findClearDir(myRC.getDirection().rotateRight(), motor, -1));
 				
 				BuildHelper.buildInFront(builder, schematic);
+<<<<<<< HEAD
         	}		
+=======
+        	}
+			
+>>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
         } 
         catch (Exception e) {
             System.out.println("caught exception:");
