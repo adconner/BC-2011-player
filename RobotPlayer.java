@@ -5,12 +5,7 @@ import hex.data.*;
 import hex.navigation.*;
 import hex.state.*;
 import hex.state.recycler.RecyclerInitialState;
-<<<<<<< HEAD
-=======
 
-import java.util.ArrayList;
-
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
 import battlecode.common.*;
 
 public class RobotPlayer implements Runnable {
@@ -25,12 +20,8 @@ public class RobotPlayer implements Runnable {
 	
 	@Override
 	public void run() {
-<<<<<<< HEAD
 		while (myRC.components().length==0)
 			myRC.yield(); // for equipping
-=======
-		//myRC.yield(); // for equipping
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
 		checkForNewComponents();
 		
 		// we need to watch out here if robots are not becoming fully equipped before moving
@@ -39,19 +30,14 @@ public class RobotPlayer implements Runnable {
 
 	}
 	
-<<<<<<< HEAD
-=======
-	
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
 	private AbstractState getInitialState() {
 		if(myRC.getChassis()==Chassis.BUILDING) { //We'll eventually have to differentiate between recyclers, factories, and armories
 			return new RecyclerInitialState(myRC, robotComps);
 		}
 		else if (robotComps.builder !=null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
-<<<<<<< HEAD
+
 			System.out.println("Scout");
-=======
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
+
 			return new MineScoutState(myRC, robotComps, new Navigator(myRC.getLocation().add(Direction.NORTH, 20), robotComps)); //Need a better way of picking target or just telling it to roam
 		}
 		else {

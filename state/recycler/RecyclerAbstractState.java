@@ -27,8 +27,4 @@ public abstract class RecyclerAbstractState extends AbstractState {
 		else return new RecyclerIdleState(myRC, robotComps);
 	}
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a

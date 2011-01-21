@@ -1,10 +1,7 @@
 package hex.data;
 
-<<<<<<< HEAD
-=======
 import com.sun.xml.internal.bind.v2.runtime.Location;
 
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
 import battlecode.common.BuilderController;
 import battlecode.common.Chassis;
 import battlecode.common.ComponentType;
@@ -61,8 +58,4 @@ public class BuildHelper {
 	}
 	
 	private BuildHelper() {} // class cannot be instantiated
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a

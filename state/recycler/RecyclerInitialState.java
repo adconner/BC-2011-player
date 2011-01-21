@@ -14,8 +14,4 @@ public class RecyclerInitialState extends RecyclerAbstractState {
 		// nothing
 	}
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a

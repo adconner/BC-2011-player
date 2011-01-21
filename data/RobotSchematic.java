@@ -72,8 +72,4 @@ public class RobotSchematic {
 			weight += c.weight;
 		return weight <= chassis.weight;
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 87102257428f1aaf823cbc765609aa528390b19a
