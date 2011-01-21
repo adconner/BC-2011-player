@@ -39,10 +39,16 @@ public class MessageWrapper {
 		int startByte = startBit/8;
 		int endByte = endBit/8;
 		
-		if (data.length() < endByte)
+		if (data.length() < endByte || startByte > endByte || endBit - startBit >= 32) // TODO remove this check
 			return -1; // error
 		
 		int out = 0;
+		if (startByte == endByte) {
+			int sb = startBit - 8*startByte;
+			int eb = endBit - 8*startByte;
+			int mask = (1 << eb) - 1;
+			mask &= ~((1 << sb) - 1);
+		}
 		for (int i = startByte; i <= endByte; i++) {
 			byte b = (byte)data.charAt(i);
 		}
