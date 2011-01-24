@@ -1,6 +1,5 @@
 package hex.data;
 
-import hex.state.*;
 import battlecode.common.Chassis;
 import battlecode.common.ComponentType;
 
@@ -19,7 +18,9 @@ public enum Schematics {
 	// built by the CONSTRUCTOR
 	static {
 		Schematics.RECYCLER.s.addComponent(ComponentType.RECYCLER);
-		Schematics.RECYCLER.s.addOptionalComp(ComponentType.ANTENNA); // example
+//		Schematics.RECYCLER.s.addOptionalComp(ComponentType.ANTENNA); // example
+		for (int x = 0; x < 5; x++)
+			Schematics.RECYCLER.s.addOptionalComp(ComponentType.SMG);
 		Schematics.RECYCLER.s.totalCost(); // to cache this number, this may be a bad idea if these calculations are done for every robot
 	}
 	static {
@@ -52,6 +53,4 @@ public enum Schematics {
 	private Schematics(Chassis c) {
 		s = new RobotSchematic(c);
 	}
-	
-	
 }

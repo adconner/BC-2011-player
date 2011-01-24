@@ -11,8 +11,8 @@ import battlecode.common.*;
 /** for D_Star, the current location is taken to be the target, starting from the actual target */
 public class D_Star extends Navigator {
 	
-	/**D_Star needs a lot of work 
-	 * both recalculate() need to be done*/
+	/**D_Star DOES NOT work
+	 * problem with the way calculate works*/
 	private Map<MapLocation, Double> scores; //Contains scores of all squares that have been calculated
 	private Map<MapLocation, Direction> path; //Contains order of MapLocations to be traversed and the Direction the robot should face AFTER getting into the tile
 	private double additional; //To help when recalculating
@@ -55,12 +55,12 @@ public class D_Star extends Navigator {
 
 	@SuppressWarnings("unchecked")
 	private ArrayList<Direction> reCalculate(MapLocation loc, MapLocation tar) {
-		scores.changeValue(path.getKey(1), 1000 + additional);
+		scores.changeValue(path.getKey(1), 1000. + additional);
 		
 		SortedMap<MapLocation, Double> open = new SortedMap<MapLocation, Double>();
 		//Keeps track of directions to get to each location
 		Map<MapLocation, ArrayList<Direction>> closed = new Map<MapLocation, ArrayList<Direction>>();
-		open.add(tar, 0);
+		open.add(tar, 0.0);
 		try {
 			ArrayList<Direction> newDirs = reCalculate(tar, loc, open, closed);
 			additional++;
@@ -199,6 +199,8 @@ public class D_Star extends Navigator {
 			if (current.equals(tar)) {
 				ArrayList<Direction> d = closed.valueOfKey(prev);
 				d.add(Extra.dirTo(tar, current)); //dirTo is backwards because the calculated path is going backwards
+				open = new SortedMap<MapLocation, Double>();
+				System.out.println(d);
 				return d;
 			}
 			else {
@@ -216,13 +218,13 @@ public class D_Star extends Navigator {
 				
 				//Check adjacent squares
 				ArrayList<MapLocation> adj = Extra.locsNextTo(current);
+				System.out.println(adj);
 				for (MapLocation loc: adj) {
 					//Not sure how to tell if a terrain is traversable or not yet. Will fix later. 
 					//Until then, will assume all is traversable
+//					if (!open.contains(loc)) {
 					if (!open.contains(loc) && !closed.contains(loc)) {
-						if (control.hasSensor() && control.sensor.canSenseSquare(loc) && control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND) == null)
-							open.addPair(loc, dirs.size() + scoreTile(loc, tar));
-						else if (!control.hasSensor() || !control.sensor.canSenseSquare(loc))
+						if (Extra.senseIfClear(control, loc))
 							open.addPair(loc, dirs.size() + scoreTile(loc, tar));
 						else //There's something in that tile, so we can't move there
 							scores.add(loc, 1000.0);
@@ -231,6 +233,7 @@ public class D_Star extends Navigator {
 				return calculate(current, tar, open, closed);	
 			}
 		}
+		System.out.println(closed.valueOfKey(prev));
 		return closed.valueOfKey(prev);
 	}
 }

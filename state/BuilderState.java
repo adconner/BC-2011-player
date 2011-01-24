@@ -2,11 +2,8 @@ package hex.state;
 
 import hex.data.*;
 import battlecode.common.BuilderController;
-import battlecode.common.Chassis;
-import battlecode.common.ComponentType;
 import battlecode.common.MovementController;
 import battlecode.common.RobotController;
-import battlecode.common.RobotLevel;
 
 public class BuilderState extends AbstractState {
 
@@ -14,6 +11,9 @@ public class BuilderState extends AbstractState {
 	public BuilderState(RobotController RC, RobotControls comp, RobotSchematic schem) {
 		super(RC, comp);
 		schematic = schem;
+	}
+	public BuilderState(RobotController RC, RobotControls comp) {
+		super(RC, comp);
 	}
 
 	@Override

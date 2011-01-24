@@ -1,10 +1,7 @@
 package hex.state;
 
-import hex.data.Extra;
 import hex.data.RobotControls;
 import hex.navigation.*;
-
-import java.util.ArrayList;
 
 import battlecode.common.*;
 
@@ -28,7 +25,7 @@ public class NavigationState extends AbstractState {
                     myRC.yield();
                 }
                
-                navi.blindMove();
+                navi.explore();
                 
 //                navi.move();
                 

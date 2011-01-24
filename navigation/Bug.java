@@ -28,13 +28,13 @@ public class Bug extends Navigator {
 			curDir = myRC.getDirection();
 			if (!curLoc.equals(target)) {
 				if (tracing) {
-					if (canDeadReckon()) {
-						tracing = false; //Stop tracing
-						motor.setDirection(deadReckon());
+					if (clearOfWall()) {
+						motor.setDirection(clear());
 						while (motor.isActive()) {
 		                    myRC.yield();
 		                }
 						motor.moveForward();
+						if (canDeadReckon()) tracing = false; //Stop tracing
 					}
 					else if (!motor.canMove(curDir)) { //It hit another wall -> it's in a corner
 						hitWall();
@@ -44,8 +44,7 @@ public class Bug extends Navigator {
 						motor.moveForward();
 					}
 					else {
-						//motor.setDirection(dirToTrace()); //Pick a direction to trace the object
-						dirToTrace();
+						motor.setDirection(dirToTrace()); //Pick a direction to trace the object
 						while (motor.isActive()) {
 		                    myRC.yield();
 		                }
@@ -63,7 +62,6 @@ public class Bug extends Navigator {
 					else {
 						tracing = true;
 						motor.setDirection(dirToTrace()); //Pick a direction to trace the object
-//						dirToTrace();
 						while (motor.isActive()) {
 		                    myRC.yield();
 		                }
@@ -89,18 +87,37 @@ public class Bug extends Navigator {
 		}
 	}
 
+	private Direction clear() {
+		if (sideOfWall != 'C') {
+			if (sideOfWall=='L')
+				return Extra.rotate(curDir, 90);
+			if (sideOfWall=='R')
+				return Extra.rotate(curDir, -90);
+		}
+		return deadReckon();
+	}
+	
 	//Need to check if we're at the very end of the wall
-	private boolean canDeadReckon() throws GameActionException {
-		if (control.hasSensor() && sideOfWall != 'C') {
-			if (sideOfWall=='L') 
-				return control.sensor.senseObjectAtLocation(curLoc.add(Extra.rotate(curDir, 90)), RobotLevel.ON_GROUND) == null;
-			if (sideOfWall=='R') 
-				return control.sensor.senseObjectAtLocation(curLoc.add(Extra.rotate(curDir, -90)), RobotLevel.ON_GROUND) == null;
+	private boolean clearOfWall() throws GameActionException {
+//		if (control.hasSensor() && sideOfWall != 'C') {
+		if (sideOfWall != 'C') {
+			if (sideOfWall=='L') {
+				Direction dir = Extra.rotate(curDir, 90);
+				return motor.canMove(dir);// || control.sensor.senseObjectAtLocation(curLoc.add(dir), RobotLevel.ON_GROUND) == null;
+			}
+			if (sideOfWall=='R') {
+				Direction dir = Extra.rotate(curDir, -90);
+				return motor.canMove(dir);// || control.sensor.senseObjectAtLocation(curLoc.add(dir), RobotLevel.ON_GROUND) == null;
+			}
 		}
 		Direction d = deadReckon();
 		return motor.canMove(d) && d != curDir.opposite();
 	}
 	
+	private boolean canDeadReckon() {
+		Direction d = deadReckon();
+		return motor.canMove(d) && d != curDir.opposite();
+	}
 	private Direction deadReckon() {
 		return curLoc.directionTo(target);
 	}
@@ -129,15 +146,15 @@ public class Bug extends Navigator {
 				int degRot = Extra.degreesBetween(curDir, dir);
 				if (degRot < 180) sideOfWall = 'R';
 				else if (degRot > 180) sideOfWall = 'L';
-				System.out.print(sideOfWall);
 				return dir;
 			}
 			else if (!tried) {
 				rotation *=-1;
+				dir = Extra.rotate(curDir, rotation * 45);
 				tried = true;
 			}
 			triedDirs.add(dir);
-			dir = Extra.rotate(dir, rotation);
+			//dir = Extra.rotate(dir, rotation);
 		} 
 	}
 }

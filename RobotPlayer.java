@@ -20,9 +20,10 @@ public class RobotPlayer implements Runnable {
 	
 	@Override
 	public void run() {
-		while (myRC.components().length==0)
+		while (myRC.components().length == 0 || robotComps.sensor == null || robotComps.mover == null) {
 			myRC.yield(); // for equipping
-		checkForNewComponents();
+			checkForNewComponents();
+		}
 		
 		// we need to watch out here if robots are not becoming fully equipped before moving
 		
@@ -35,9 +36,7 @@ public class RobotPlayer implements Runnable {
 			return new RecyclerInitialState(myRC, robotComps);
 		}
 		else if (robotComps.builder !=null && robotComps.builder.type()==ComponentType.CONSTRUCTOR && robotComps.sensor != null) {
-
 			System.out.println("Scout");
-
 			return new MineScoutState(myRC, robotComps, new Navigator(myRC.getLocation().add(Direction.NORTH, 20), robotComps)); //Need a better way of picking target or just telling it to roam
 		}
 		else {
@@ -85,5 +84,4 @@ public class RobotPlayer implements Runnable {
 			System.out.println(Clock.getBytecodeNum());
 		}
 	}
-
 }

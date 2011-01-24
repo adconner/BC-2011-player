@@ -1,16 +1,15 @@
 package hex.state.recycler;
 
 import hex.data.BuildHelper;
-import hex.data.Extra;
 import hex.data.RobotControls;
 import hex.data.RobotSchematic;
 import battlecode.common.*;
 
-public class RecyclerBuildSchematic extends RecyclerAbstractState {
+public class RecyclerOptionalBuildSchematic extends RecyclerBuildSchematic {
 
 	RobotSchematic schematic;
-	public RecyclerBuildSchematic(RobotController RC, RobotControls comp, RobotSchematic schematic) {
-		super(RC, comp);
+	public RecyclerOptionalBuildSchematic(RobotController RC, RobotControls comp, RobotSchematic schematic) {
+		super(RC, comp, schematic);
 		this.schematic = schematic;
 	}
 
@@ -19,10 +18,12 @@ public class RecyclerBuildSchematic extends RecyclerAbstractState {
 		MovementController motor = robotComps.mover;
 		BuilderController builder = robotComps.builder;
         try {
-			while (builder.isActive() || motor.isActive() || myRC.getTeamResources() <= 2*schematic.totalCost())
+        	MapLocation unit = findUnit();
+        	
+			while (builder.isActive() || motor.isActive() || myRC.getTeamResources() >= 2*schematic.totalCost())
 				myRC.yield();
         	
-			BuildHelper.buildInLocation(builder, schematic, myRC.getLocation().add(Extra.findClearDir(myRC.getDirection(), motor)));
+			BuildHelper.buildOptionalComponentsInLocation(builder, schematic, unit);
 			
         } 
         catch (Exception e) {
@@ -31,4 +32,7 @@ public class RecyclerBuildSchematic extends RecyclerAbstractState {
         }
 	}
 
+	private MapLocation findUnit() {
+		return myRC.getLocation();
+	}
 }

@@ -12,11 +12,18 @@ public class Extra {
 
 	public static ArrayList<MapLocation> locsNextTo(MapLocation loc) {
 		ArrayList<MapLocation> locs = new ArrayList<MapLocation>();
-		for (int x = -1; x < 2; x++) {
+		/*for (int x = -1; x < 2; x++) {
 			for (int y = -1; y<2; y++) {
-				if (!(x==0 && y==0))
+				if ((x==0 && y!=0) || (x!=0 && y==0)) //forgotten how to do this properly
+					locs.add(loc.add(x,y));
+				else
 					locs.add(loc.add(x,y));
 			}
+		}*/
+		Direction d = Direction.NORTH;
+		for (int a = 0; a < 8; a++) {
+			locs.add(loc.add(d));
+			d = d.rotateLeft();
 		}
 		return locs;
 	}
@@ -86,7 +93,7 @@ public class Extra {
 	public static int degreesBetween(Direction first, Direction second) {
 		int turns = 0;
 		while (first != second) {
-			first.rotateLeft();
+			first = first.rotateLeft();
 			turns++;
 		}
 		return turns*45;
@@ -117,5 +124,12 @@ public class Extra {
 				current = rotate(current, -45);
 			else break; 
 		return findClearDir(current, mot);
+	}
+	
+	public static boolean chassisFull(Chassis chas, ComponentController[] comps) {
+		int weight = 0;
+		for (ComponentController c: comps) 
+			weight += c.type().weight;
+		return weight==chas.weight;
 	}
 }

@@ -19,22 +19,19 @@ public class Navigator {
 		myRC = control.mover.getRC();
 	}
 	
-	public void blindMove() {
+	public void explore() {
 		try {
-            /*** beginning of main loop ***/
-            while (motor.isActive()) {
-                myRC.yield();
-            }
+            while (motor.isActive()) myRC.yield();
             // Austin: I wonder if these checks should be the responsibity of the calling function for the sake of efficiency over safety
             // depends on if we need the bytecode used by isActive(), same in children of Navigator
 
             curDir = myRC.getDirection();
             if (motor.canMove(curDir)) {
-                motor.moveForward();
-            } else 
-            	motor.setDirection(Extra.findClearDir(curDir, motor));
-
-            /*** end of main loop ***/
+            	motor.moveForward();
+            } else {
+                motor.setDirection(Extra.findClearDir(curDir, motor));
+            }
+            
         } catch (Exception e) {
             System.out.println("caught exception:");
             e.printStackTrace();
@@ -42,7 +39,7 @@ public class Navigator {
 	}
 	
 	public void move() {
-		blindMove();
+		explore();
 	}
 	
 	public void useJump(MapLocation to) {
@@ -59,6 +56,9 @@ public class Navigator {
 				}
 	}
 	
+	public MapLocation getTarget() {
+		return target;
+	}
 	public void setTarget(MapLocation tar) {
 		target = tar;
 	}

@@ -2,6 +2,7 @@ package hex.state.recycler;
 
 import battlecode.common.Clock;
 import battlecode.common.RobotController;
+import hex.data.Extra;
 import hex.data.RobotControls;
 import hex.data.Schematics;
 import hex.data.Tunable;
@@ -20,11 +21,14 @@ public abstract class RecyclerAbstractState extends AbstractState {
     	myRC.setIndicatorString(0, String.valueOf(myRC.getTeamResources()));
     	
 		// TODO modify when recyclers should be in production mode
-		if (Clock.getRoundNum() < Tunable.RECYCLER_ROUNDS_TO_PRODUCE_BUILDERS)
+		if (Clock.getRoundNum() > 200 && Clock.getRoundNum() < Tunable.RECYCLER_ROUNDS_TO_PRODUCE_BUILDERS)
 			return new RecyclerBuildSchematic(myRC, robotComps, Schematics.LIGHT_CONSTRUCTOR.s);
-		else if (myRC.getTeamResources() >= Tunable.RECYCLER_MINIMUM_FLUX_LIGHT_PRODUCTION  && Clock.getRoundNum() < Tunable.RECYCLER_ROUNDS_TO_STOP_LIGHT_PRODUCTION)
+//    	if (!Extra.chassisFull(myRC.getChassis(), myRC.components()))
+//    		return new RecyclerOptionalBuildSchematic(myRC, robotComps, Schematics.RECYCLER.s);
+		else if (myRC.getTeamResources() >= Tunable.RECYCLER_MINIMUM_FLUX_LIGHT_PRODUCTION  && Clock.getRoundNum() > Tunable.RECYCLER_ROUNDS_TO_PRODUCE_BUILDERS && Clock.getRoundNum() < Tunable.RECYCLER_ROUNDS_TO_STOP_LIGHT_PRODUCTION)
 			return new RecyclerBuildSchematic(myRC, robotComps, Schematics.LIGHT_ATTACK.s);
-		else return new RecyclerIdleState(myRC, robotComps);
+		else 
+			return new RecyclerIdleState(myRC, robotComps);
 	}
 
 }
