@@ -1,11 +1,11 @@
-package hex.navigation;
+package team146.navigation;
 
 import java.util.ArrayList;
 
-import hex.data.Extra;
-import hex.data.Map;
-import hex.data.RobotControls;
-import hex.data.SortedMap;
+import team146.data.Extra;
+import team146.data.Map;
+import team146.data.RobotControls;
+import team146.data.SortedMap;
 import battlecode.common.*;
 
 /** for D_Star, the current location is taken to be the target, starting from the actual target */

@@ -1,4 +1,4 @@
-package hex.data;
+package team146.data;
 
 import java.util.ArrayList;
 import battlecode.common.*;
@@ -55,9 +55,16 @@ public class Extra {
 	}
 	
 	public static boolean senseIfClear(RobotControls control, MapLocation loc) throws GameActionException {
-		boolean a= control.hasSensor() && control.sensor.canSenseSquare(loc) && control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND) == null;
+//		boolean land = true;
+		boolean land = control.sensor.getRC().senseTerrainTile(loc)==TerrainTile.LAND;
+		boolean a= control.hasSensor() && control.sensor.canSenseSquare(loc);
+		if (a) {
+			GameObject o = control.sensor.senseObjectAtLocation(loc, RobotLevel.ON_GROUND);
+//			land = control.sensor.getRC().senseTerrainTile(loc)==TerrainTile.LAND;
+			a = o == null;
+		}
 		boolean b = !control.hasSensor() || !control.sensor.canSenseSquare(loc);
-		return a || b;
+		return land && (a || b);
 	}
 
 	/**

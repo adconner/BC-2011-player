@@ -1,7 +1,7 @@
-package hex.navigation;
+package team146.navigation;
 
-import hex.data.Extra;
-import hex.data.RobotControls;
+import team146.data.Extra;
+import team146.data.RobotControls;
 import battlecode.common.*;
 
 public class Navigator {

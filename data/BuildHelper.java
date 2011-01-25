@@ -1,4 +1,4 @@
-package hex.data;
+package team146.data;
 
 import battlecode.common.BuilderController;
 import battlecode.common.Chassis;

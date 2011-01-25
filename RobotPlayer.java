@@ -1,10 +1,10 @@
-package hex;
+package team146;
 
 
-import hex.data.*;
-import hex.navigation.*;
-import hex.state.*;
-import hex.state.recycler.RecyclerInitialState;
+import team146.data.*;
+import team146.navigation.*;
+import team146.state.*;
+import team146.state.recycler.RecyclerInitialState;
 
 import battlecode.common.*;
 

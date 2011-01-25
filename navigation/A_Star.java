@@ -1,7 +1,7 @@
-package hex.navigation;
+package team146.navigation;
 
 import java.util.ArrayList;
-import hex.data.*;
+import team146.data.*;
 import battlecode.common.*;
 
 public class A_Star extends Navigator {

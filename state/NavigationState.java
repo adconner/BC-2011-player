@@ -1,7 +1,7 @@
-package hex.state;
+package team146.state;
 
-import hex.data.RobotControls;
-import hex.navigation.*;
+import team146.data.RobotControls;
+import team146.navigation.*;
 
 import battlecode.common.*;
 

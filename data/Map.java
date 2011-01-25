@@ -1,4 +1,4 @@
-package hex.data;
+package team146.data;
 
 import java.util.ArrayList;
 
@@ -31,10 +31,10 @@ public class Map<T1, T2> {
 	}
 	
 	public T2 getValue(int i) {
-		return (T2)value.get(i);
+		return value.get(i);
 	}
 	public T1 getKey(int i) {
-		return (T1)key.get(i);
+		return key.get(i);
 	}
 	public T1 getKeyFromValue(T2 v) {
 		return key.get(value.indexOf(v));

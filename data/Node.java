@@ -1,4 +1,4 @@
-package hex.data;
+package team146.data;
 
 public class Node {
 	protected Node prevN;

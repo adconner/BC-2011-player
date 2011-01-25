@@ -1,7 +1,7 @@
-package hex.state;
+package team146.state;
 
 import battlecode.common.RobotController;
-import hex.data.RobotControls;
+import team146.data.RobotControls;
 
 public abstract class AbstractState implements Runnable {
 	

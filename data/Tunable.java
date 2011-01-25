@@ -1,4 +1,4 @@
-package hex.data;
+package team146.data;
 
 // put all the tunable constants of our engine here
 public class Tunable {

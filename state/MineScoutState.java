@@ -1,7 +1,7 @@
-package hex.state;
+package team146.state;
 
-import hex.data.*;
-import hex.navigation.*;
+import team146.data.*;
+import team146.navigation.*;
 
 import java.util.ArrayList;
 import java.util.Random;

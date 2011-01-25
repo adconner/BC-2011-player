@@ -1,6 +1,6 @@
-package hex.state;
+package team146.state;
 
-import hex.data.*;
+import team146.data.*;
 import battlecode.common.BuilderController;
 import battlecode.common.MovementController;
 import battlecode.common.RobotController;

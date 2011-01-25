@@ -1,8 +1,8 @@
-package hex.state.recycler;
+package team146.state.recycler;
 
 import battlecode.common.RobotController;
-import hex.data.RobotControls;
-import hex.state.AbstractState;
+import team146.data.RobotControls;
+import team146.state.AbstractState;
 
 public class RecyclerIdleState extends RecyclerAbstractState {
 

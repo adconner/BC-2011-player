@@ -1,6 +1,6 @@
-package hex.state.recycler;
+package team146.state.recycler;
 
-import hex.data.RobotControls;
+import team146.data.RobotControls;
 import battlecode.common.RobotController;
 
 public class RecyclerInitialState extends RecyclerAbstractState {

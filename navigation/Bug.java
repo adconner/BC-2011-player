@@ -1,8 +1,8 @@
-package hex.navigation;
+package team146.navigation;
 
-import hex.data.Extra;
-import hex.data.Map;
-import hex.data.RobotControls;
+import team146.data.Extra;
+import team146.data.Map;
+import team146.data.RobotControls;
 
 import java.util.ArrayList;
 import battlecode.common.*;
